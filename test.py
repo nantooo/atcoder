@@ -67,13 +67,55 @@ inf = float('INF')
 
 
 def A():
-    a = II()
-    b = a//2
-    p = b/a
-    if a % 2:
-        print(1-p)
+    S = input()
+
+    K = II()
+
+    if len(S) == 2:
+        print(K//2)
+        return
+
+    i = 0
+    ans = 0
+    A = 1
+    p = 0
+    z = 0
+    z2 = 0
+    while(A > 0):
+        count = 0
+        if i == 0:
+            p = 1
+        while(S[i] == S[i+1]):
+
+            if S[i+2] == '\n':
+                p = 2
+            count += 1
+            i += 1
+        if S[i+1] == '\n':
+            p = 2
+        if p == 1:
+            z = count+1
+        if p == 2:
+            z2 = count+1
+
+        if(S[i] != S[i+1]):
+            i += 1
+        if count == len(S)-2:
+            print(((len(S)-1)*K)//2)
+            return
+
+        if count > 0:
+            ans += (count+1)//2
+
+        if S[-1] == S[i]:
+            A = -1
+        p = 0
+
+    if K >= 2 and S[-2] == S[0] and (z % 2 == 1 and z2 % 2 == 1):
+        ans += 1
+        print((ans*K)-1)
     else:
-        print(p)
+        print(ans*K)
 
     return
 
@@ -151,7 +193,7 @@ def E():
         bit = 0
 
         for d in c:
-            bit += 1 << (d-1)
+            bit |= 1 << (d-1)
 
         for w in range(bit_max):
 
@@ -170,8 +212,33 @@ def E():
 
 
 def F():
-    S = input()
-    print(solution(S))
+    N, M = LI()
+
+    value = [0] * M
+    power = [0] * M
+    for i in range(M):
+        a, b = LI()
+        value[i] = a
+        c = LI()
+        L = ['0'] * N
+        for k in c:
+            L[k - 1] = '1'
+        bint = ''.join(L)
+        power[i] = int(bint, 2)
+    bint = ''.join(list(['1'] * N))
+    dp = [inf] * (int(bint, 2)+1)
+    t = 0
+    cost = 0
+
+    dp[0] = 0
+    for s in range(int(bint, 2) + 1):
+        for i in range(M):
+            t = s | power[i]
+            cost = dp[s] + value[i]
+            dp[t] = min(dp[t], cost)
+    print(-1) if(dp[-1] == inf) else print(dp[-1])
+
+    return
 
     # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -206,4 +273,4 @@ def solution(S):
 
 # Solve
 if __name__ == '__main__':
-    F()
+    A()

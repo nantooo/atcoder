@@ -62,77 +62,38 @@ def my_index_multi(l, x):
     return [i for i, _x in enumerate(l) if _x == x]
 
 
+def sosu(x):
+    for i in range(2, int(sqrt(x)+1)):
+        if x % i == 0:
+            return False
+    return True
+
+
 mod = 1000000007
 inf = float('INF')
 
 
 def A():
-    S = input()
-
-    K = II()
-
-    if len(S) == 2:
-        print(K//2)
-        return
-
-    i = 0
-    ans = 0
-    A = 1
-    p = 0
-    z = 0
-    z2 = 0
-    while(A > 0):
-        count = 0
-        if i == 0:
-            p = 1
-        while(S[i] == S[i+1]):
-
-            if S[i+2] == '\n':
-                p = 2
-            count += 1
-            i += 1
-        if S[i+1] == '\n':
-            p = 2
-        if p == 1:
-            z = count+1
-        if p == 2:
-            z2 = count+1
-
-        if(S[i] != S[i+1]):
-            i += 1
-        if count == len(S)-2:
-            print(((len(S)-1)*K)//2)
-            return
-
-        if count > 0:
-            ans += (count+1)//2
-
-        if S[-1] == S[i]:
-            A = -1
-        p = 0
-
-    if K >= 2 and S[-2] == S[0] and (z % 2 == 1 and z2 % 2 == 1):
-        ans += 1
-        print((ans*K)-1)
+    A, B = LI()
+    ans = A-2*B
+    if ans > 0:
+        print(ans)
     else:
-        print(ans*K)
-
+        print(0)
     return
 
 # B
 
 
 def B():
-    N, K = map(int, input().split())
-    h = LI()
-    count = 0
+    N = II()
+    d = LI()
+    ans = 0
+    for i in range(N):
+        for x in range(i+1, N):
+            ans += d[i]*d[x]
+    print(ans)
 
-    for i in h:
-        if i >= K:
-            count += 1
-        else:
-            continue
-    print(count)
     return
 
 # C
@@ -140,12 +101,14 @@ def B():
 
 def C():
     N = II()
-    A = LI()
-    J = [0] * N
-    for i, n in enumerate(A):
-        J[n-1] = i+1
-    for s in J:
-        print(s, end=" ")
+    S = input()
+    c = 0
+    count = 0
+    for i in S:
+        if i != c:
+            count += 1
+        c = i
+    print(count-1)
 
     return
 
@@ -153,27 +116,35 @@ def C():
 
 
 def D():
-    A, B = map(int, input().split())
-    g = gcd(A, B)
-    # go = g
-    # myset = set([1])
-    sq = int(sqrt(g)) + 2
-    ans = 1
+    N = II()
+    L = LI()
+    L.sort()
 
-    for i in range(2, sq):
-        if g % i == 0:
-            ans += 1
-        while g % i == 0:
-            g /= i
+    L2 = deque(L)
+    count = 0
+    for i in range(N-1):
+        L2.popleft()
+        L3 = list(L2)
+        L3 = deque(L3)
 
-            # myset.add(i)
-        if g == 1:
+        for j in range(i+1, N):
+            L3.popleft()
+            if L3 == deque([]):
+                break
+            p = L[i]+L[j]
+
+            if min(L3) >= p:
+                continue
+            #Lk = filter(lambda x: x % 2 == 1, L2)
+            Lk = [x for x in L3 if p > x]
+
+            for k in Lk:
+                if k+L[i] > L[j] and k+L[j] > L[i]:
+                    #print(k,L[i] , L[j])
+                    count += 1
+        if len(L2) == 2:
             break
-        if i == sq - 1:
-            # myset.add(go)
-            ans += 1
-
-    print(ans)
+    print(count)
 
     return
 
@@ -273,4 +244,4 @@ def solution(S):
 
 # Solve
 if __name__ == '__main__':
-    A()
+    D()
